@@ -10,7 +10,7 @@ const HeroSection = () => {
           src="/images/campus.png"
           alt="Uppsala University Campus"
           fill
-          className="object-cover brightness-45 grayscale blur-[2px]"
+          className="object-cover brightness-45 grayscale blur-[0px]"
           priority
         />
       </div>
