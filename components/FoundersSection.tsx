@@ -3,19 +3,19 @@ import Image from 'next/image';
 const founders = [
   {
     name: 'AXEL WOHLIN',
-    image: '/images/logo.png',
+    image: '/images/axel.png',
     linkedin: 'https://www.linkedin.com/in/axel-wohlin-6a000a164/',
     github: 'https://github.com/AXELWOHLIN'
   },
   {
     name: 'NILS SKOOG',
-    image: '/images/logo.png',
+    image: '/images/nils.png',
     linkedin: 'https://www.linkedin.com/in/axel-wohlin-6a000a164/',
     github: 'https://github.com/AXELWOHLIN'
   },
   {
     name: 'ALEXANDER SUNDQUIST',
-    image: '/images/logo.png',
+    image: '/images/alexander.png',
     linkedin: 'https://www.linkedin.com/in/axel-wohlin-6a000a164/',
     github: 'https://github.com/AXELWOHLIN'
   }
