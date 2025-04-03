@@ -10,15 +10,20 @@ const founders = [
   {
     name: 'NILS SKOOG',
     image: '/images/nils.png',
-    linkedin: 'https://www.linkedin.com/in/axel-wohlin-6a000a164/',
-    github: 'https://github.com/AXELWOHLIN'
+    linkedin: 'https://www.linkedin.com/in/nils-skoog-0667371b7/',
+    github: 'https://github.com/NisseSkoog'
   },
   {
     name: 'ALEXANDER SUNDQUIST',
     image: '/images/alexander.png',
-    linkedin: 'https://www.linkedin.com/in/axel-wohlin-6a000a164/',
-    github: 'https://github.com/AXELWOHLIN'
-  }
+    linkedin: 'https://www.linkedin.com/in/alexander-sundquist/',
+    github: 'https://github.com/alexandersundquist'
+  },
+  { name: 'VICTOR WONG',
+  image: '/images/victor.png',
+  linkedin: 'https://www.linkedin.com/in/victor-jh-wong/',
+  github: 'https://github.com/vjhwong'
+}
 ];
 
 const FoundersSection = () => {
