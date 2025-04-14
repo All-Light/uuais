@@ -144,7 +144,7 @@ const ApplicationForm = ({ eventId, onClose }: { eventId: number; onClose: () =>
         />
       </div>
       <div>
-        <label htmlFor="motivation" className="block text-white mb-2">Motivation (Optional)</label>
+        <label htmlFor="motivation" className="block text-white mb-2">Motivation</label>
         <textarea
           id="motivation"
           name="motivation"
