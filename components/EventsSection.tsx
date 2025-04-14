@@ -34,23 +34,32 @@ const EventModal = ({ isOpen, onClose, children, showApplyButton, onApply }: {
 }) => {
   if (!isOpen) return null;
 
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-[#2a2a2a] rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
-        <div className="p-6">
+    <div 
+      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      onClick={handleBackdropClick}
+    >
+      <div className="bg-[#2a2a2a] rounded-lg w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        <div className="p-4 sm:p-6">
           {children}
-          <div className="flex gap-4 mt-6">
+          <div className="flex gap-3 mt-4">
             {showApplyButton && (
               <button
                 onClick={onApply}
-                className="flex-1 px-4 py-2 bg-[#c8102e] text-white rounded-md hover:bg-[#a00d24] transition-colors"
+                className="flex-1 px-4 py-2 bg-[#c8102e] text-white rounded-md hover:bg-[#a00d24] transition-colors text-sm"
               >
                 Apply Now
               </button>
             )}
             <button
               onClick={onClose}
-              className={`px-4 py-2 bg-[#c8102e] text-white rounded-md hover:bg-[#a00d24] transition-colors ${showApplyButton ? 'flex-1' : 'w-full'}`}
+              className={`px-4 py-2 bg-[#c8102e] text-white rounded-md hover:bg-[#a00d24] transition-colors text-sm ${showApplyButton ? 'flex-1' : 'w-full'}`}
             >
               Close
             </button>
@@ -94,9 +103,9 @@ const ApplicationForm = ({ eventId, onClose }: { eventId: number; onClose: () =>
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-3">
       <div>
-        <label htmlFor="name" className="block text-white mb-2">Name *</label>
+        <label htmlFor="name" className="block text-white mb-1 text-sm">Name *</label>
         <input
           type="text"
           id="name"
@@ -104,11 +113,11 @@ const ApplicationForm = ({ eventId, onClose }: { eventId: number; onClose: () =>
           required
           value={formData.name}
           onChange={handleChange}
-          className="w-full px-3 py-2 bg-[#1a1a1a] text-white rounded-md border border-white/10 focus:outline-none focus:border-[#c8102e]"
+          className="w-full px-3 py-1.5 bg-[#1a1a1a] text-white rounded-md border border-white/10 focus:outline-none focus:border-[#c8102e] text-sm"
         />
       </div>
       <div>
-        <label htmlFor="email" className="block text-white mb-2">Email *</label>
+        <label htmlFor="email" className="block text-white mb-1 text-sm">Email *</label>
         <input
           type="email"
           id="email"
@@ -116,11 +125,11 @@ const ApplicationForm = ({ eventId, onClose }: { eventId: number; onClose: () =>
           required
           value={formData.email}
           onChange={handleChange}
-          className="w-full px-3 py-2 bg-[#1a1a1a] text-white rounded-md border border-white/10 focus:outline-none focus:border-[#c8102e]"
+          className="w-full px-3 py-1.5 bg-[#1a1a1a] text-white rounded-md border border-white/10 focus:outline-none focus:border-[#c8102e] text-sm"
         />
       </div>
       <div>
-        <label htmlFor="yearOfStudy" className="block text-white mb-2">Year of Study *</label>
+        <label htmlFor="yearOfStudy" className="block text-white mb-1 text-sm">Year of Study *</label>
         <input
           type="text"
           id="yearOfStudy"
@@ -128,11 +137,11 @@ const ApplicationForm = ({ eventId, onClose }: { eventId: number; onClose: () =>
           required
           value={formData.yearOfStudy}
           onChange={handleChange}
-          className="w-full px-3 py-2 bg-[#1a1a1a] text-white rounded-md border border-white/10 focus:outline-none focus:border-[#c8102e]"
+          className="w-full px-3 py-1.5 bg-[#1a1a1a] text-white rounded-md border border-white/10 focus:outline-none focus:border-[#c8102e] text-sm"
         />
       </div>
       <div>
-        <label htmlFor="program" className="block text-white mb-2">Program *</label>
+        <label htmlFor="program" className="block text-white mb-1 text-sm">Program *</label>
         <input
           type="text"
           id="program"
@@ -140,22 +149,22 @@ const ApplicationForm = ({ eventId, onClose }: { eventId: number; onClose: () =>
           required
           value={formData.program}
           onChange={handleChange}
-          className="w-full px-3 py-2 bg-[#1a1a1a] text-white rounded-md border border-white/10 focus:outline-none focus:border-[#c8102e]"
+          className="w-full px-3 py-1.5 bg-[#1a1a1a] text-white rounded-md border border-white/10 focus:outline-none focus:border-[#c8102e] text-sm"
         />
       </div>
       <div>
-        <label htmlFor="motivation" className="block text-white mb-2">Motivation</label>
+        <label htmlFor="motivation" className="block text-white mb-1 text-sm">Motivation (Optional)</label>
         <textarea
           id="motivation"
           name="motivation"
           value={formData.motivation}
           onChange={handleChange}
-          rows={4}
-          className="w-full px-3 py-2 bg-[#1a1a1a] text-white rounded-md border border-white/10 focus:outline-none focus:border-[#c8102e]"
+          rows={3}
+          className="w-full px-3 py-1.5 bg-[#1a1a1a] text-white rounded-md border border-white/10 focus:outline-none focus:border-[#c8102e] text-sm"
         />
       </div>
       <div>
-        <label htmlFor="linkedin" className="block text-white mb-2">LinkedIn *</label>
+        <label htmlFor="linkedin" className="block text-white mb-1 text-sm">LinkedIn *</label>
         <input
           type="url"
           id="linkedin"
@@ -163,11 +172,11 @@ const ApplicationForm = ({ eventId, onClose }: { eventId: number; onClose: () =>
           required
           value={formData.linkedin}
           onChange={handleChange}
-          className="w-full px-3 py-2 bg-[#1a1a1a] text-white rounded-md border border-white/10 focus:outline-none focus:border-[#c8102e]"
+          className="w-full px-3 py-1.5 bg-[#1a1a1a] text-white rounded-md border border-white/10 focus:outline-none focus:border-[#c8102e] text-sm"
         />
       </div>
       <div>
-        <label htmlFor="github" className="block text-white mb-2">GitHub *</label>
+        <label htmlFor="github" className="block text-white mb-1 text-sm">GitHub *</label>
         <input
           type="url"
           id="github"
@@ -175,21 +184,21 @@ const ApplicationForm = ({ eventId, onClose }: { eventId: number; onClose: () =>
           required
           value={formData.github}
           onChange={handleChange}
-          className="w-full px-3 py-2 bg-[#1a1a1a] text-white rounded-md border border-white/10 focus:outline-none focus:border-[#c8102e]"
+          className="w-full px-3 py-1.5 bg-[#1a1a1a] text-white rounded-md border border-white/10 focus:outline-none focus:border-[#c8102e] text-sm"
         />
       </div>
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full px-4 py-2 bg-[#c8102e] text-white rounded-md hover:bg-[#a00d24] transition-colors disabled:opacity-50"
+        className="w-full px-4 py-2 mt-2 bg-[#c8102e] text-white rounded-md hover:bg-[#a00d24] transition-colors disabled:opacity-50 text-sm"
       >
         {isSubmitting ? 'Submitting...' : 'Submit Application'}
       </button>
       {submitStatus === 'success' && (
-        <p className="text-green-500 text-center">Application submitted successfully!</p>
+        <p className="text-green-500 text-center text-sm">Application submitted successfully!</p>
       )}
       {submitStatus === 'error' && (
-        <p className="text-red-500 text-center">Error submitting application. Please try again.</p>
+        <p className="text-red-500 text-center text-sm">Error submitting application. Please try again.</p>
       )}
     </form>
   );
