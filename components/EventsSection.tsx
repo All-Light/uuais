@@ -203,7 +203,7 @@ const EventsSection = () => {
     {
       id: 1,
       title: "Vantel (YC 25)", 
-      image: "/images/vantel.png",
+      image: "/images/vantel2.png",
       summary: "Join us for a talk with Vantel, one of three Swedish start-ups accepted into the latest batch of the prestigious Y Combinator.",
       details: `Join us for a talk with the amazing founding team of the AI start-up Vantel. 
 Vantel was one of three Swedish start-ups that were accepted into the latest batch of the prestigious Silicon Valley start-up incubator Y-combinator. 
@@ -231,12 +231,13 @@ Sonja Lytkkens, Ångströmslaboratoriet`
               className="bg-[#2a2a2a] rounded-lg overflow-hidden cursor-pointer transform transition-transform hover:scale-105"
               onClick={() => setSelectedEvent(event.id)}
             >
-              <div className="relative h-48 w-full">
+              <div className="relative aspect-[16/9] w-full">
                 <Image
                   src={event.image}
                   alt={`${event.title} Event`}
                   layout="fill"
-                  objectFit="cover"
+                  objectFit="contain"
+                  className="bg-white"
                 />
               </div>
               <div className="p-6">
@@ -259,13 +260,13 @@ Sonja Lytkkens, Ångströmslaboratoriet`
       >
         {selectedEvent && events.find(e => e.id === selectedEvent) && (
           <div>
-            <div className="relative h-64 w-full mb-6">
+            <div className="relative aspect-[16/9] w-full mb-6">
               <Image
                 src={events.find(e => e.id === selectedEvent)!.image}
                 alt={`${events.find(e => e.id === selectedEvent)!.title} Event`}
                 layout="fill"
-                objectFit="cover"
-                className="rounded-lg"
+                objectFit="contain"
+                className="bg-white rounded-lg"
               />
             </div>
             <h2 className="text-2xl font-bold text-white mb-4">
