@@ -195,7 +195,7 @@ const ApplicationForm = ({ eventId, onClose }: { eventId: number; onClose: () =>
         {isSubmitting ? 'Submitting...' : 'Submit Application'}
       </button>
       {submitStatus === 'success' && (
-        <p className="text-green-500 text-center text-sm">Application submitted successfully!</p>
+        <p className="text-green-500 text-center text-sm">Thank you for your application.</p>
       )}
       {submitStatus === 'error' && (
         <p className="text-red-500 text-center text-sm">Error submitting application. Please try again.</p>
