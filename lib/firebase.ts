@@ -11,5 +11,21 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 };
 
-const app = initializeApp(firebaseConfig);
+// Add logging to check if environment variables are loaded
+if (!firebaseConfig.projectId) {
+  console.error('Firebase projectId is not defined. Environment variables may not be properly loaded.');
+  console.log('Current Firebase config:', {
+    ...firebaseConfig,
+    apiKey: firebaseConfig.apiKey ? '[REDACTED]' : undefined
+  });
+}
+
+let app;
+try {
+  app = initializeApp(firebaseConfig);
+} catch (error) {
+  console.error('Error initializing Firebase:', error);
+  throw error;
+}
+
 export const db = getFirestore(app); 
