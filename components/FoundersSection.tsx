@@ -11,7 +11,7 @@ const founders = [
     name: 'NILS SKOOG',
     image: '/images/nils.png',
     linkedin: 'https://www.linkedin.com/in/nils-skoog-0667371b7/',
-    github: 'https://github.com/NisseSkoog'
+    github: 'https://github.com/NilsSkoog14'
   },
   {
     name: 'ALEXANDER SUNDQUIST',
@@ -32,13 +32,13 @@ const FoundersSection = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-2xl font-bold text-white mb-3">SEEKING FOUNDING MEMBERS</h2>
-          <p className="text-base text-white/80">
+          <p className="text-base text-white/80 text-center">
             Email applications to{' '}
-            <a href="mailto:president@uuai.se" className="text-[#c8102e] hover:underline">
-              president@uuai.se
+            <a href="mailto:info@uuais.com" className="text-[#c8102e] hover:underline">
+              info@uuais.com
             </a>
+            {' '}containing your name, field of study, <br></br> and a short description of how your interests align with the society.
           </p>
-          <p className="text-base text-white/80 mt-2">Include your coolest project!</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
