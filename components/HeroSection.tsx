@@ -26,12 +26,7 @@ const HeroSection = () => {
         <p className="text-lg sm:text-xl text-white/90 mb-6 max-w-2xl mx-auto">
           We are a participatory society for everyone into AI at Uppsala University
         </p>
-        <Link
-          href="/application"
-          className="inline-flex items-center px-6 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-[#c8102e] hover:bg-[#a00d26] transition-colors"
-        >
-          Apply Now →
-        </Link>
+
       </div>
     </section>
   );
