@@ -164,24 +164,22 @@ const ApplicationForm = ({ eventId, onClose }: { eventId: number; onClose: () =>
         />
       </div>
       <div>
-        <label htmlFor="linkedin" className="block text-white mb-1 text-sm">LinkedIn *</label>
+        <label htmlFor="linkedin" className="block text-white mb-1 text-sm">LinkedIn</label>
         <input
           type="url"
           id="linkedin"
           name="linkedin"
-          required
           value={formData.linkedin}
           onChange={handleChange}
           className="w-full px-3 py-1.5 bg-[#1a1a1a] text-white rounded-md border border-white/10 focus:outline-none focus:border-[#c8102e] text-sm"
         />
       </div>
       <div>
-        <label htmlFor="github" className="block text-white mb-1 text-sm">GitHub *</label>
+        <label htmlFor="github" className="block text-white mb-1 text-sm">GitHub</label>
         <input
           type="url"
           id="github"
           name="github"
-          required
           value={formData.github}
           onChange={handleChange}
           className="w-full px-3 py-1.5 bg-[#1a1a1a] text-white rounded-md border border-white/10 focus:outline-none focus:border-[#c8102e] text-sm"
