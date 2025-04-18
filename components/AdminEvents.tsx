@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { db, storage } from '@/lib/firebase';
-import { collection, addDoc, getDocs, deleteDoc, doc, query, getCountFromServer } from 'firebase/firestore';
+import { collection, addDoc, getDocs, deleteDoc, doc, getCountFromServer } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import Image from 'next/image';
 
 interface Application {
   id: string;
@@ -184,7 +185,7 @@ const AdminEvents = () => {
     }
   };
 
-  const handleDelete = async (eventId: string, internalName: string) => {
+  const handleDelete = async (eventId: string) => {
     if (window.confirm(`Are you sure you want to delete this event? This will also delete all application data.`)) {
       try {
         // Delete the event document
@@ -309,10 +310,12 @@ const AdminEvents = () => {
             <div className="mt-4">
               <p className="text-white mb-2 text-sm">Image Preview:</p>
               <div className="relative w-full aspect-[16/9] max-w-md">
-                <img 
+                <Image 
                   src={imagePreview} 
                   alt="Cover preview" 
-                  className="w-full h-full object-contain bg-white/10 rounded-md" 
+                  fill
+                  style={{ objectFit: 'contain' }}
+                  className="bg-white/10 rounded-md" 
                 />
               </div>
             </div>
@@ -370,7 +373,7 @@ const AdminEvents = () => {
                     </td>
                     <td className="py-3 px-4">
                       <button
-                        onClick={() => handleDelete(event.id, event.internalName)}
+                        onClick={() => handleDelete(event.id)}
                         className="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-sm"
                       >
                         Delete

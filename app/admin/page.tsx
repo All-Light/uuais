@@ -32,7 +32,7 @@ const AdminPage = () => {
       } else {
         setError(data.message || 'Invalid password');
       }
-    } catch (error) {
+    } catch (err) {
       setError('Authentication failed. Please try again.');
     } finally {
       setIsLoading(false);
