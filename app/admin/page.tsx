@@ -33,6 +33,7 @@ const AdminPage = () => {
         setError(data.message || 'Invalid password');
       }
     } catch (err) {
+      console.error('Login error:', err);
       setError('Authentication failed. Please try again.');
     } finally {
       setIsLoading(false);
