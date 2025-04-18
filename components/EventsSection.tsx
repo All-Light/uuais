@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { db } from '@/lib/firebase';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs } from 'firebase/firestore';
 
 interface ApplicationForm {
   name: string;
@@ -13,6 +13,15 @@ interface ApplicationForm {
   motivation: string;
   linkedin: string;
   github: string;
+}
+
+interface Event {
+  id: string;
+  internalName: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  coverImage: string;
 }
 
 const initialFormState: ApplicationForm = {
@@ -70,7 +79,7 @@ const EventModal = ({ isOpen, onClose, children, showApplyButton, onApply }: {
   );
 };
 
-const ApplicationForm = ({ eventId, onClose }: { eventId: number; onClose: () => void }) => {
+const ApplicationForm = ({ event, onClose }: { event: Event; onClose: () => void }) => {
   const [formData, setFormData] = useState<ApplicationForm>(initialFormState);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -80,9 +89,10 @@ const ApplicationForm = ({ eventId, onClose }: { eventId: number; onClose: () =>
     setIsSubmitting(true);
     
     try {
-      await addDoc(collection(db, 'vantel'), {
+      // Use the event's internalName as the collection name
+      await addDoc(collection(db, event.internalName), {
         ...formData,
-        eventId,
+        eventId: event.id,
         submittedAt: new Date().toISOString()
       });
       setSubmitStatus('success');
@@ -203,27 +213,37 @@ const ApplicationForm = ({ eventId, onClose }: { eventId: number; onClose: () =>
 };
 
 const EventsSection = () => {
-  const [selectedEvent, setSelectedEvent] = useState<number | null>(null);
+  const [events, setEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [showApplication, setShowApplication] = useState(false);
+  const [currentEventForApplication, setCurrentEventForApplication] = useState<Event | null>(null);
 
-  const events = [
-    {
-      id: 1,
-      title: "Vantel (YC 25)", 
-      image: "/images/vantel2.png",
-      summary: "Join us for a talk with Vantel, one of three Swedish start-ups accepted into the latest batch of the prestigious Y Combinator.",
-      details: `Join us for a talk with the amazing founding team of the AI start-up Vantel. 
-Vantel was one of three Swedish start-ups that were accepted into the latest batch of the prestigious Silicon Valley start-up incubator Y-combinator. 
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const eventsSnapshot = await getDocs(collection(db, 'events'));
+        const eventsData = eventsSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        })) as Event[];
+        
+        setEvents(eventsData);
+      } catch (error) {
+        console.error('Error fetching events:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-Come learn about entrepreneurship, AI and the future of work!
-They are currently hiring a Founding Engineer and Interns, so take the chance to get to know the team!
+    fetchEvents();
+  }, []);
 
-
-23 April 2025
-17:15 - 18:00
-Sonja Lytkkens, Ångströmslaboratoriet`
-    }
-  ];
+  const handleApplyClick = (event: Event) => {
+    setCurrentEventForApplication(event);
+    setShowApplication(true);
+    setSelectedEvent(null);
+  };
 
   return (
     <section id="events" className="py-16 bg-[#1a1a1a]/50">
@@ -231,60 +251,76 @@ Sonja Lytkkens, Ångströmslaboratoriet`
         <div className="text-center mb-12">
           <h2 className="text-2xl font-bold text-white mb-3">Upcoming Events</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {events.map((event) => (
-            <div
-              key={event.id}
-              className="bg-[#2a2a2a] rounded-lg overflow-hidden cursor-pointer transform transition-transform hover:scale-105"
-              onClick={() => setSelectedEvent(event.id)}
-            >
-              <div className="relative aspect-[16/9] w-full">
-                <Image
-                  src={event.image}
-                  alt={`${event.title} Event`}
-                  layout="fill"
-                  objectFit="contain"
-                  className="bg-white"
-                />
+
+        {loading ? (
+          <div className="text-center text-white/70">Loading events...</div>
+        ) : events.length === 0 ? (
+          <div className="text-center text-white/70">No upcoming events at this time.</div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {events.map((event) => (
+              <div
+                key={event.id}
+                className="bg-[#2a2a2a] rounded-lg overflow-hidden cursor-pointer transform transition-transform hover:scale-105"
+                onClick={() => setSelectedEvent(event)}
+              >
+                <div className="relative aspect-[16/9] w-full">
+                  {event.coverImage ? (
+                    <Image
+                      src={event.coverImage}
+                      alt={`${event.title} Event`}
+                      fill
+                      style={{ objectFit: 'contain' }}
+                      className="bg-white"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-white">
+                      <p className="text-gray-500">No image available</p>
+                    </div>
+                  )}
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-semibold text-white mb-2">{event.title}</h3>
+                  <p className="text-white/80">{event.subtitle}</p>
+                </div>
               </div>
-              <div className="p-6">
-                <h3 className="text-xl font-semibold text-white mb-2">{event.title}</h3>
-                <p className="text-white/80">{event.summary}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
       <EventModal
         isOpen={selectedEvent !== null}
         onClose={() => setSelectedEvent(null)}
         showApplyButton={true}
-        onApply={() => {
-          setShowApplication(true);
-          setSelectedEvent(null);
-        }}
+        onApply={() => selectedEvent && handleApplyClick(selectedEvent)}
       >
-        {selectedEvent && events.find(e => e.id === selectedEvent) && (
+        {selectedEvent && (
           <div>
             <div className="relative aspect-[16/9] w-full mb-6">
-              <Image
-                src={events.find(e => e.id === selectedEvent)!.image}
-                alt={`${events.find(e => e.id === selectedEvent)!.title} Event`}
-                layout="fill"
-                objectFit="contain"
-                className="bg-white rounded-lg"
-              />
+              {selectedEvent.coverImage ? (
+                <Image
+                  src={selectedEvent.coverImage}
+                  alt={`${selectedEvent.title} Event`}
+                  fill
+                  style={{ objectFit: 'contain' }}
+                  className="bg-white rounded-lg"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-white rounded-lg">
+                  <p className="text-gray-500">No image available</p>
+                </div>
+              )}
             </div>
             <h2 className="text-2xl font-bold text-white mb-4">
-              {events.find(e => e.id === selectedEvent)!.title}
+              {selectedEvent.title}
             </h2>
             <p className="text-white/80 mb-4">
-              {events.find(e => e.id === selectedEvent)!.summary}
+              {selectedEvent.subtitle}
             </p>
             <div className="border-t border-white/10 my-4"></div>
             <p className="text-white/80 whitespace-pre-line">
-              {events.find(e => e.id === selectedEvent)!.details}
+              {selectedEvent.description}
             </p>
           </div>
         )}
@@ -294,8 +330,12 @@ Sonja Lytkkens, Ångströmslaboratoriet`
         isOpen={showApplication}
         onClose={() => setShowApplication(false)}
       >
-        <h2 className="text-2xl font-bold text-white mb-6">Apply for {events[0].title}</h2>
-        <ApplicationForm eventId={events[0].id} onClose={() => setShowApplication(false)} />
+        {currentEventForApplication && (
+          <>
+            <h2 className="text-2xl font-bold text-white mb-6">Apply for {currentEventForApplication.title}</h2>
+            <ApplicationForm event={currentEventForApplication} onClose={() => setShowApplication(false)} />
+          </>
+        )}
       </EventModal>
     </section>
   );

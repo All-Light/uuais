@@ -12,6 +12,9 @@
 
 # testing
 /coverage
+/functions*
+/dataconnect*
+/dataconnect-generated/js*
 
 # next.js
 /.next/
