@@ -12,7 +12,7 @@ interface Application {
   eventId: string;
   github: string;
   linkedin: string;
-  motivation: string;
+  relevantExperience: string;
   name: string;
   program: string;
   submittedAt: string;
@@ -428,10 +428,10 @@ const AdminEvents = () => {
                       </div>
                     </div>
                     
-                    {app.motivation && (
+                    {app.relevantExperience && (
                       <div className="mb-3">
-                        <p className="text-white/50 text-sm">Motivation</p>
-                        <p className="text-white whitespace-pre-line">{app.motivation}</p>
+                        <p className="text-white/50 text-sm">Relevant Experience and Project Idea</p>
+                        <p className="text-white whitespace-pre-line">{app.relevantExperience}</p>
                       </div>
                     )}
                     

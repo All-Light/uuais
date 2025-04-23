@@ -10,7 +10,7 @@ interface ApplicationForm {
   email: string;
   yearOfStudy: string;
   program: string;
-  motivation: string;
+  relevantExperience: string;
   linkedin: string;
   github: string;
 }
@@ -29,7 +29,7 @@ const initialFormState: ApplicationForm = {
   email: '',
   yearOfStudy: '',
   program: '',
-  motivation: '',
+  relevantExperience: '',
   linkedin: '',
   github: ''
 };
@@ -163,13 +163,14 @@ const ApplicationForm = ({ event, onClose }: { event: Event; onClose: () => void
         />
       </div>
       <div>
-        <label htmlFor="motivation" className="block text-white mb-1 text-sm">Motivation (Optional)</label>
+        <label htmlFor="relevantExperience" className="block text-white mb-1 text-sm">Relevant Experience and Project Idea *</label>
         <textarea
-          id="motivation"
-          name="motivation"
-          value={formData.motivation}
+          id="relevantExperience"
+          name="relevantExperience"
+          required
+          value={formData.relevantExperience}
           onChange={handleChange}
-          rows={3}
+          rows={4}
           className="w-full px-3 py-1.5 bg-[#1a1a1a] text-white rounded-md border border-white/10 focus:outline-none focus:border-[#c8102e] text-sm"
         />
       </div>
