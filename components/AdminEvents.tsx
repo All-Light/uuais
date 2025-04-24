@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { db, storage } from '@/lib/firebase';
-import { collection, addDoc, getDocs, deleteDoc, doc, getCountFromServer } from 'firebase/firestore';
+import { collection, addDoc, getDocs, deleteDoc, doc, getCountFromServer, updateDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import Image from 'next/image';
 
@@ -80,6 +80,8 @@ const AdminEvents = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [selectedEventApplications, setSelectedEventApplications] = useState<{ event: Event, applications: Application[] } | null>(null);
   const [loadingApplications, setLoadingApplications] = useState(false);
+  const [editingEvent, setEditingEvent] = useState<Event | null>(null);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   useEffect(() => {
     fetchEvents();
@@ -132,6 +134,71 @@ const AdminEvents = () => {
     }
   };
 
+  const handleEdit = (event: Event) => {
+    setEditingEvent(event);
+    setFormData({
+      internalName: event.internalName,
+      title: event.title,
+      subtitle: event.subtitle,
+      description: event.description,
+      coverImage: null,
+    });
+    setImagePreview(event.coverImage);
+    setShowEditModal(true);
+  };
+
+  const handleUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingEvent) return;
+    
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+    
+    try {
+      let imageUrl = editingEvent.coverImage;
+      
+      // If a new image was uploaded, store it and get the URL
+      if (formData.coverImage) {
+        const storageRef = ref(storage, `event-images/${formData.internalName}-${formData.coverImage.name}`);
+        const uploadResult = await uploadBytes(storageRef, formData.coverImage);
+        imageUrl = await getDownloadURL(uploadResult.ref);
+      }
+      
+      // Update event in Firestore
+      await updateDoc(doc(db, 'events', editingEvent.id), {
+        title: formData.title,
+        subtitle: formData.subtitle,
+        description: formData.description,
+        coverImage: imageUrl,
+        updatedAt: new Date().toISOString()
+      });
+      
+      setSubmitStatus('success');
+      fetchEvents();
+      setTimeout(() => {
+        setShowEditModal(false);
+        resetForm();
+      }, 1500);
+    } catch (error) {
+      console.error('Error updating event:', error);
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const resetForm = () => {
+    setFormData({
+      internalName: '',
+      title: '',
+      subtitle: '',
+      description: '',
+      coverImage: null,
+    });
+    setImagePreview(null);
+    setEditingEvent(null);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -169,14 +236,7 @@ const AdminEvents = () => {
       await deleteDoc(dummyDocRef);
       
       setSubmitStatus('success');
-      setFormData({
-        internalName: '',
-        title: '',
-        subtitle: '',
-        description: '',
-        coverImage: null,
-      });
-      setImagePreview(null);
+      resetForm();
       fetchEvents();
     } catch (error) {
       console.error('Error creating event:', error);
@@ -373,12 +433,20 @@ const AdminEvents = () => {
                       </button>
                     </td>
                     <td className="py-3 px-4">
-                      <button
-                        onClick={() => handleDelete(event.id)}
-                        className="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-sm"
-                      >
-                        Delete
-                      </button>
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => handleEdit(event)}
+                          className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDelete(event.id)}
+                          className="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-sm"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -470,6 +538,106 @@ const AdminEvents = () => {
                 ))}
               </div>
             )}
+          </div>
+        )}
+      </AppModal>
+
+      <AppModal
+        isOpen={showEditModal}
+        onClose={() => {
+          setShowEditModal(false);
+          resetForm();
+        }}
+      >
+        {editingEvent && (
+          <div>
+            <h2 className="text-2xl font-bold text-white mb-4">
+              Edit Event: {editingEvent.title}
+            </h2>
+            <form onSubmit={handleUpdate} className="space-y-4">
+              <div>
+                <label htmlFor="title" className="block text-white mb-1 text-sm">Event Title *</label>
+                <input
+                  type="text"
+                  id="edit-title"
+                  name="title"
+                  required
+                  value={formData.title}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 bg-[#1a1a1a] text-white rounded-md border border-white/10 focus:outline-none focus:border-[#c8102e]"
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="subtitle" className="block text-white mb-1 text-sm">Event Subtitle/Summary *</label>
+                <input
+                  type="text"
+                  id="edit-subtitle"
+                  name="subtitle"
+                  required
+                  value={formData.subtitle}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 bg-[#1a1a1a] text-white rounded-md border border-white/10 focus:outline-none focus:border-[#c8102e]"
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="description" className="block text-white mb-1 text-sm">Event Description *</label>
+                <textarea
+                  id="edit-description"
+                  name="description"
+                  required
+                  value={formData.description}
+                  onChange={handleChange}
+                  rows={5}
+                  className="w-full px-3 py-2 bg-[#1a1a1a] text-white rounded-md border border-white/10 focus:outline-none focus:border-[#c8102e]"
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="coverImage" className="block text-white mb-1 text-sm">Cover Image</label>
+                <input
+                  type="file"
+                  id="edit-coverImage"
+                  name="coverImage"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="w-full px-3 py-2 bg-[#1a1a1a] text-white rounded-md border border-white/10 focus:outline-none focus:border-[#c8102e]"
+                />
+                <p className="text-white/50 text-xs mt-1">Leave empty to keep the current image</p>
+              </div>
+              
+              {imagePreview && (
+                <div className="mt-4">
+                  <p className="text-white mb-2 text-sm">Current Image:</p>
+                  <div className="relative w-full aspect-[16/9] max-w-md">
+                    <Image 
+                      src={imagePreview} 
+                      alt="Cover preview" 
+                      fill
+                      style={{ objectFit: 'contain' }}
+                      className="bg-white/10 rounded-md" 
+                    />
+                  </div>
+                </div>
+              )}
+              
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full px-4 py-2 mt-4 bg-[#c8102e] text-white rounded-md hover:bg-[#a00d24] transition-colors disabled:opacity-50"
+              >
+                {isSubmitting ? 'Updating Event...' : 'Update Event'}
+              </button>
+              
+              {submitStatus === 'success' && (
+                <p className="text-green-500 text-center">Event updated successfully.</p>
+              )}
+              
+              {submitStatus === 'error' && (
+                <p className="text-red-500 text-center">Error updating event. Please try again.</p>
+              )}
+            </form>
           </div>
         )}
       </AppModal>
