@@ -13,6 +13,7 @@ interface ApplicationForm {
   relevantExperience: string;
   linkedin: string;
   github: string;
+  desiredTeammates: string;
 }
 
 interface Event {
@@ -31,7 +32,8 @@ const initialFormState: ApplicationForm = {
   program: '',
   relevantExperience: '',
   linkedin: '',
-  github: ''
+  github: '',
+  desiredTeammates: ''
 };
 
 const EventModal = ({ isOpen, onClose, children, showApplyButton, onApply }: { 
@@ -171,6 +173,17 @@ const ApplicationForm = ({ event, onClose }: { event: Event; onClose: () => void
           value={formData.relevantExperience}
           onChange={handleChange}
           rows={4}
+          className="w-full px-3 py-1.5 bg-[#1a1a1a] text-white rounded-md border border-white/10 focus:outline-none focus:border-[#c8102e] text-sm"
+        />
+      </div>
+      <div>
+        <label htmlFor="desiredTeammates" className="block text-white mb-1 text-sm">Desired Teammates (if any)</label>
+        <textarea
+          id="desiredTeammates"
+          name="desiredTeammates"
+          value={formData.desiredTeammates}
+          onChange={handleChange}
+          rows={2}
           className="w-full px-3 py-1.5 bg-[#1a1a1a] text-white rounded-md border border-white/10 focus:outline-none focus:border-[#c8102e] text-sm"
         />
       </div>

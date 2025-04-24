@@ -17,6 +17,7 @@ interface Application {
   program: string;
   submittedAt: string;
   yearOfStudy: string;
+  desiredTeammates?: string;
 }
 
 interface Event {
@@ -432,6 +433,13 @@ const AdminEvents = () => {
                       <div className="mb-3">
                         <p className="text-white/50 text-sm">Relevant Experience and Project Idea</p>
                         <p className="text-white whitespace-pre-line">{app.relevantExperience}</p>
+                      </div>
+                    )}
+                    
+                    {app.desiredTeammates && (
+                      <div className="mb-3">
+                        <p className="text-white/50 text-sm">Desired Teammates</p>
+                        <p className="text-white whitespace-pre-line">{app.desiredTeammates}</p>
                       </div>
                     )}
                     
