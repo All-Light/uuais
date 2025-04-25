@@ -23,6 +23,7 @@ interface Event {
   subtitle: string;
   description: string;
   coverImage: string;
+  date: string; // Add this property
 }
 
 const initialFormState: ApplicationForm = {
@@ -239,9 +240,9 @@ const EventsSection = () => {
         const eventsSnapshot = await getDocs(collection(db, 'events'));
         const eventsData = eventsSnapshot.docs.map(doc => ({
           id: doc.id,
-          ...doc.data()
+          ...doc.data(),
         })) as Event[];
-        
+
         setEvents(eventsData);
       } catch (error) {
         console.error('Error fetching events:', error);
@@ -296,6 +297,16 @@ const EventsSection = () => {
                 <div className="p-6">
                   <h3 className="text-xl font-semibold text-white mb-2">{event.title}</h3>
                   <p className="text-white/80">{event.subtitle}</p>
+                  <p className="text-white/50 text-sm mt-2">{new Date(event.date).toLocaleDateString()}</p>
+                  <span
+                    className={`inline-block px-3 py-1 mt-2 text-sm font-medium rounded ${
+                      new Date(event.date) > new Date()
+                        ? 'bg-green-500 text-white'
+                        : 'bg-red-500 text-white'
+                    }`}
+                  >
+                    {new Date(event.date) > new Date() ? 'Upcoming' : 'Past'}
+                  </span>
                 </div>
               </div>
             ))}
@@ -355,4 +366,4 @@ const EventsSection = () => {
   );
 };
 
-export default EventsSection; 
+export default EventsSection;
