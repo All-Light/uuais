@@ -499,7 +499,7 @@ const AdminEvents = () => {
                     
                     {app.relevantExperience && (
                       <div className="mb-3">
-                        <p className="text-white/50 text-sm">Relevant Experience and Project Idea</p>
+                        <p className="text-white/50 text-sm">Relevant Experience</p>
                         <p className="text-white whitespace-pre-line">{app.relevantExperience}</p>
                       </div>
                     )}
