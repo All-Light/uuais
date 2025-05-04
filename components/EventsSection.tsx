@@ -166,7 +166,7 @@ const ApplicationForm = ({ event, onClose }: { event: Event; onClose: () => void
         />
       </div>
       <div>
-        <label htmlFor="relevantExperience" className="block text-white mb-1 text-sm">Relevant Experience and Project Idea *</label>
+        <label htmlFor="relevantExperience" className="block text-white mb-1 text-sm">Relevant Experience*</label>
         <textarea
           id="relevantExperience"
           name="relevantExperience"
