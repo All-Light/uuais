@@ -264,13 +264,13 @@ const EventsSection = () => {
     <section id="events" className="py-16 bg-[#1a1a1a]/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-2xl font-bold text-white mb-3">Upcoming Events</h2>
+          <h2 className="text-2xl font-bold text-white mb-3">Events</h2>
         </div>
 
         {loading ? (
           <div className="text-center text-white/70">Loading events...</div>
         ) : events.length === 0 ? (
-          <div className="text-center text-white/70">No upcoming events at this time.</div>
+          <div className="text-center text-white/70">No events at this time.</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {events.map((event) => (
