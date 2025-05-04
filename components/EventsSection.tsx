@@ -307,7 +307,7 @@ const EventsSection = () => {
                     <p className="text-white/80">{event.subtitle}</p>
                   </div>
                   <div className="px-6 pb-4 mt-auto">
-                    <p className="text-white/50 text-sm">{new Date(event.date).toLocaleDateString()}</p>
+                    <p className="text-white/50 text-sm">{new Date(event.date).toLocaleDateString('en-GB')}</p>
                   </div>
                 </div>
               </div>
