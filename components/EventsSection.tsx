@@ -276,7 +276,7 @@ const EventsSection = () => {
             {events.map((event) => (
               <div
                 key={event.id}
-                className="bg-[#2a2a2a] rounded-lg overflow-hidden cursor-pointer transform transition-transform hover:scale-105"
+                className="bg-[#2a2a2a] rounded-lg overflow-hidden cursor-pointer transform transition-transform hover:scale-105 flex flex-col h-full"
                 onClick={() => setSelectedEvent(event)}
               >
                 <div className="relative aspect-[16/9] w-full">
@@ -293,20 +293,22 @@ const EventsSection = () => {
                       <p className="text-gray-500">No image available</p>
                     </div>
                   )}
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold text-white mb-2">{event.title}</h3>
-                  <p className="text-white/80">{event.subtitle}</p>
-                  <p className="text-white/50 text-sm mt-2">{new Date(event.date).toLocaleDateString()}</p>
                   <span
-                    className={`inline-block px-3 py-1 mt-2 text-sm font-medium rounded ${
-                      new Date(event.date) > new Date()
-                        ? 'bg-green-500 text-white'
-                        : 'bg-red-500 text-white'
+                    className={`absolute bottom-2 left-2 px-3 py-1 text-sm font-medium rounded ${
+                      new Date(event.date) > new Date() ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
                     }`}
                   >
                     {new Date(event.date) > new Date() ? 'Upcoming' : 'Past'}
                   </span>
+                </div>
+                <div className="flex flex-col h-full flex-1">
+                  <div className="p-6 flex-1">
+                    <h3 className="text-xl font-semibold text-white mb-2">{event.title}</h3>
+                    <p className="text-white/80">{event.subtitle}</p>
+                  </div>
+                  <div className="px-6 pb-4 mt-auto">
+                    <p className="text-white/50 text-sm">{new Date(event.date).toLocaleDateString()}</p>
+                  </div>
                 </div>
               </div>
             ))}
