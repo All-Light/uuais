@@ -1,0 +1,14 @@
+{
+  "nav": {
+    "home": "Hem",
+    "events": "Evenemang",
+    "about": "Om oss",
+    "application": "Ansökan"
+  },
+  "theme": {
+    "toggle": "Växla tema"
+  },
+  "language": {
+    "toggle": "Byt till engelska"
+  }
+}
